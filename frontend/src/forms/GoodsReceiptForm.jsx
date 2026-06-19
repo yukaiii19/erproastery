@@ -6,6 +6,7 @@ import SelectAsync from '@/components/SelectAsync';
 
 export default function GoodsReceiptForm({ isUpdateForm = false }) {
   const translate = useLanguage();
+  const form = Form.useFormInstance();
   return (
     <>
       <Form.Item
@@ -33,6 +34,25 @@ export default function GoodsReceiptForm({ isUpdateForm = false }) {
           entity={'purchaseOrder'}
           displayLabels={['number']}
           searchFields={'number'}
+          onChange={(value, option) => {
+            if (option) {
+              const currentSupplier = form.getFieldValue('supplier');
+              const newSupplier = option.supplier?._id || option.supplier;
+              if (newSupplier && currentSupplier !== newSupplier) {
+                form.setFieldsValue({ supplier: newSupplier });
+              }
+              const currentItems = form.getFieldValue('items');
+              if (!currentItems || currentItems.length === 0 || (currentItems.length === 1 && !currentItems[0].product)) {
+                form.setFieldsValue({
+                  items: option.items?.map(i => ({
+                    product: i.product?._id || i.product,
+                    itemName: i.itemName,
+                    quantityReceived: i.quantity || 1
+                  })) || []
+                });
+              }
+            }
+          }}
         />
       </Form.Item>
 
@@ -79,12 +99,13 @@ export default function GoodsReceiptForm({ isUpdateForm = false }) {
                       searchFields={'name'}
                       placeholder="Select Product"
                       onChange={(value, option) => {
-                        const items = Form.useFormInstance().getFieldValue('items') || [];
+                        const items = form.getFieldValue('items') || [];
                         items[name] = {
                           ...items[name],
+                          product: value,
                           itemName: option?.name || '',
                         };
-                        Form.useFormInstance().setFieldsValue({ items });
+                        form.setFieldsValue({ items });
                       }}
                     />
                   </Form.Item>

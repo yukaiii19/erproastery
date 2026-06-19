@@ -110,6 +110,7 @@ export default function StockAdjustmentForm({ isUpdateForm = false }) {
                         const items = form.getFieldValue('items') || [];
                         items[field.name] = {
                           ...items[field.name],
+                          product: value,
                           itemName: option?.name || '',
                         };
                         form.setFieldsValue({ items });

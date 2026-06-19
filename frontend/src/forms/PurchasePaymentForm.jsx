@@ -7,7 +7,7 @@ import { useMoney, useDate } from '@/settings';
 
 import useLanguage from '@/locale/useLanguage';
 
-export default function PaymentForm({ maxAmount = null, isUpdateForm = false }) {
+export default function PurchasePaymentForm({ maxAmount = null, isUpdateForm = false }) {
   const translate = useLanguage();
   const { TextArea } = Input;
   const money = useMoney();
@@ -52,8 +52,8 @@ export default function PaymentForm({ maxAmount = null, isUpdateForm = false }) 
         />
       </Form.Item>
       <Form.Item
-        label={translate('payment Mode')}
-        name="paymentMode"
+        label={translate('purchasePayment Mode')}
+        name="purchasePaymentMode"
         rules={[
           {
             required: true,
@@ -61,11 +61,11 @@ export default function PaymentForm({ maxAmount = null, isUpdateForm = false }) 
         ]}
       >
         <SelectAsync
-          entity={'paymentMode'}
+          entity={'purchasePaymentMode'}
           displayLabels={['name']}
           withRedirect={true}
-          urlToRedirect="/payment/mode"
-          redirectLabel="Add Payment Mode"
+          urlToRedirect="/purchasePayment/mode"
+          redirectLabel="Add PurchasePayment Mode"
           autoSelect={true}
         ></SelectAsync>
       </Form.Item>

@@ -66,4 +66,24 @@ const stockAdjustmentSchema = new mongoose.Schema({
 });
 
 stockAdjustmentSchema.plugin(require('mongoose-autopopulate'));
+
+stockAdjustmentSchema.post('save', async function (doc, next) {
+  try {
+    const Product = mongoose.model('Product');
+    for (const item of doc.items) {
+      if (item.product && item.quantity) {
+        const product = await Product.findById(item.product);
+        if (product) {
+          const change = item.type === 'increase' ? item.quantity : -item.quantity;
+          product.stockQuantity = (product.stockQuantity || 0) + change;
+          await product.save();
+        }
+      }
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = mongoose.model('StockAdjustment', stockAdjustmentSchema);

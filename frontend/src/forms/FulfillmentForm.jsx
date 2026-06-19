@@ -35,6 +35,25 @@ export default function FulfillmentForm({ isUpdateForm = false }) {
           entity={'salesOrder'}
           displayLabels={['number']}
           searchFields={'number'}
+          onChange={(value, option) => {
+            if (option && !isUpdateForm) {
+              const currentClient = form.getFieldValue('client');
+              const newClient = option.client?._id || option.client;
+              if (newClient && currentClient !== newClient) {
+                form.setFieldsValue({ client: newClient });
+              }
+              const currentItems = form.getFieldValue('items');
+              if (!currentItems || currentItems.length === 0) {
+                form.setFieldsValue({
+                  items: option.items?.map(i => ({
+                    product: i.product?._id || i.product,
+                    itemName: i.itemName,
+                    quantityShipped: i.quantity,
+                  })) || []
+                });
+              }
+            }
+          }}
         />
       </Form.Item>
 
@@ -84,6 +103,7 @@ export default function FulfillmentForm({ isUpdateForm = false }) {
                         const items = form.getFieldValue('items') || [];
                         items[name] = {
                           ...items[name],
+                          product: value,
                           itemName: option?.name || '',
                         };
                         form.setFieldsValue({ items });

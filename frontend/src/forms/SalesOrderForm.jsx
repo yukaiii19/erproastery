@@ -8,6 +8,7 @@ import calculate from '@/utils/calculate';
 export default function SalesOrderForm({ isUpdateForm = false }) {
   const translate = useLanguage();
   const form = Form.useFormInstance();
+  const activeRole = localStorage.getItem('demo_role') || 'owner';
 
   const handlePriceQuantityChange = (name) => {
     const items = form.getFieldValue('items') || [];
@@ -79,6 +80,7 @@ export default function SalesOrderForm({ isUpdateForm = false }) {
                         const items = form.getFieldValue('items') || [];
                         items[name] = {
                           ...items[name],
+                          product: value,
                           itemName: option?.name || '',
                         };
                         form.setFieldsValue({ items });
@@ -129,9 +131,9 @@ export default function SalesOrderForm({ isUpdateForm = false }) {
       <Form.Item
         label={translate('status') || 'Status'}
         name="status"
-        initialValue="draft"
+        initialValue="pending_approval"
       >
-        <Select>
+        <Select disabled={!isUpdateForm || activeRole === 'sales_representative'}>
           <Select.Option value="draft">Draft</Select.Option>
           <Select.Option value="pending_approval">Pending Approval</Select.Option>
           <Select.Option value="approved">Approved</Select.Option>

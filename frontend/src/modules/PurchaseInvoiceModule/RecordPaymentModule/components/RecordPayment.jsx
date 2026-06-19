@@ -8,30 +8,30 @@ import useLanguage from '@/locale/useLanguage';
 
 import Loading from '@/components/Loading';
 
-import PaymentForm from '@/forms/PaymentForm';
+import PurchasePaymentForm from '@/forms/PurchasePaymentForm';
 import { useNavigate } from 'react-router-dom';
 import calculate from '@/utils/calculate';
 
-export default function RecordPayment({ config }) {
+export default function RecordPurchasePayment({ config }) {
   const navigate = useNavigate();
   const translate = useLanguage();
   let { entity } = config;
 
   const dispatch = useDispatch();
 
-  const { isLoading, isSuccess, current: currentInvoice } = useSelector(selectRecordPaymentItem);
+  const { isLoading, isSuccess, current: currentPurchaseInvoice } = useSelector(selectRecordPaymentItem);
 
   const [form] = Form.useForm();
 
   const [maxAmount, setMaxAmount] = useState(0);
   useEffect(() => {
-    if (currentInvoice) {
-      const { credit, total, discount } = currentInvoice;
+    if (currentPurchaseInvoice) {
+      const { credit, total, discount } = currentPurchaseInvoice;
       const calculatedMax = calculate.sub(calculate.sub(total, discount), credit);
       setMaxAmount(calculatedMax);
       form.setFieldsValue({ amount: calculatedMax });
     }
-  }, [currentInvoice]);
+  }, [currentPurchaseInvoice]);
   useEffect(() => {
     if (isSuccess) {
       form.resetFields();
@@ -42,19 +42,19 @@ export default function RecordPayment({ config }) {
   }, [isSuccess]);
 
   const onSubmit = (fieldsValue) => {
-    if (currentInvoice) {
-      const { _id: invoice } = currentInvoice;
-      const client = currentInvoice.client && currentInvoice.client._id;
+    if (currentPurchaseInvoice) {
+      const { _id: purchaseInvoice } = currentPurchaseInvoice;
+      const supplier = currentPurchaseInvoice.supplier && currentPurchaseInvoice.supplier._id;
       fieldsValue = {
         ...fieldsValue,
-        invoice,
-        client,
+        purchaseInvoice,
+        supplier,
       };
     }
 
     dispatch(
       erp.recordPayment({
-        entity: 'payment',
+        entity: 'purchasePayment',
         jsonData: fieldsValue,
       })
     );
@@ -63,10 +63,10 @@ export default function RecordPayment({ config }) {
   return (
     <Loading isLoading={isLoading}>
       <Form form={form} layout="vertical" onFinish={onSubmit}>
-        <PaymentForm maxAmount={maxAmount} />
+        <PurchasePaymentForm maxAmount={maxAmount} />
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            {translate('Record Payment')}
+            {translate('Record PurchasePayment')}
           </Button>
         </Form.Item>
       </Form>

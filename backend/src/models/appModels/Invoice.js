@@ -34,6 +34,11 @@ const invoiceSchema = new mongoose.Schema({
     required: true,
     autopopulate: true,
   },
+  salesOrder: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'SalesOrder',
+    autopopulate: true,
+  },
   converted: {
     from: {
       type: String,

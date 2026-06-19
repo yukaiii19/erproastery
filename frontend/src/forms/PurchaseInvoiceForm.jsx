@@ -65,6 +65,27 @@ export default function PurchaseInvoiceForm({ isUpdateForm = false }) {
           entity={'purchaseOrder'}
           displayLabels={['number']}
           searchFields={'number'}
+          onChange={(value, option) => {
+            if (option) {
+              const currentSupplier = form.getFieldValue('supplier');
+              const newSupplier = option.supplier?._id || option.supplier;
+              if (newSupplier && currentSupplier !== newSupplier) {
+                form.setFieldsValue({ supplier: newSupplier });
+              }
+              const currentItems = form.getFieldValue('items');
+              if (!currentItems || currentItems.length === 0 || (currentItems.length === 1 && !currentItems[0].product)) {
+                form.setFieldsValue({
+                  items: option.items?.map(i => ({
+                    product: i.product?._id || i.product,
+                    itemName: i.itemName,
+                    quantity: i.quantity,
+                    price: i.price,
+                    total: i.total
+                  })) || []
+                });
+              }
+            }
+          }}
         />
       </Form.Item>
 
@@ -98,6 +119,7 @@ export default function PurchaseInvoiceForm({ isUpdateForm = false }) {
                         const items = form.getFieldValue('items') || [];
                         items[name] = {
                           ...items[name],
+                          product: value,
                           itemName: option?.name || '',
                         };
                         form.setFieldsValue({ items });

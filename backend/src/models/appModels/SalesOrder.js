@@ -76,7 +76,7 @@ const salesOrderSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['draft', 'pending_approval', 'approved', 'rejected', 'fulfilled'],
-    default: 'draft',
+    default: 'pending_approval',
   },
   notes: {
     type: String,

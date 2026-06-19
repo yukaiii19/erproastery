@@ -19,26 +19,26 @@ import calculate from '@/utils/calculate';
 import { useSelector } from 'react-redux';
 import SelectAsync from '@/components/SelectAsync';
 
-export default function InvoiceForm({ subTotal = 0, current = null }) {
-  const { last_invoice_number } = useSelector(selectFinanceSettings);
+export default function PurchaseInvoiceForm({ subTotal = 0, current = null }) {
+  const { last_purchaseInvoice_number } = useSelector(selectFinanceSettings);
 
-  if (last_invoice_number === undefined) {
+  if (last_purchaseInvoice_number === undefined) {
     return <></>;
   }
 
-  return <LoadInvoiceForm subTotal={subTotal} current={current} />;
+  return <LoadPurchaseInvoiceForm subTotal={subTotal} current={current} />;
 }
 
-function LoadInvoiceForm({ subTotal = 0, current = null }) {
+function LoadPurchaseInvoiceForm({ subTotal = 0, current = null }) {
   const translate = useLanguage();
   const form = Form.useFormInstance();
   const { dateFormat } = useDate();
-  const { last_invoice_number } = useSelector(selectFinanceSettings);
+  const { last_purchaseInvoice_number } = useSelector(selectFinanceSettings);
   const [total, setTotal] = useState(0);
   const [taxRate, setTaxRate] = useState(0);
   const [taxTotal, setTaxTotal] = useState(0);
   const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
-  const [lastNumber, setLastNumber] = useState(() => last_invoice_number + 1);
+  const [lastNumber, setLastNumber] = useState(() => last_purchaseInvoice_number + 1);
 
   const handelTaxChange = (value) => {
     setTaxRate(value / 100);
@@ -78,10 +78,10 @@ function LoadInvoiceForm({ subTotal = 0, current = null }) {
               searchFields={'number'}
               onChange={(value, option) => {
                 if (option && !current) {
-                  const currentClient = form.getFieldValue('client');
-                  const newClient = option.client?._id || option.client;
-                  if (newClient && currentClient !== newClient) {
-                    form.setFieldsValue({ client: newClient });
+                  const currentSupplier = form.getFieldValue('supplier');
+                  const newSupplier = option.supplier?._id || option.supplier;
+                  if (newSupplier && currentSupplier !== newSupplier) {
+                    form.setFieldsValue({ supplier: newSupplier });
                   }
                   form.setFieldsValue({
                     items: option.items?.map(i => ({
@@ -99,8 +99,8 @@ function LoadInvoiceForm({ subTotal = 0, current = null }) {
         </Col>
         <Col className="gutter-row" span={8}>
           <Form.Item
-            name="client"
-            label={translate('Client')}
+            name="supplier"
+            label={translate('Supplier')}
             rules={[
               {
                 required: true,
@@ -108,10 +108,10 @@ function LoadInvoiceForm({ subTotal = 0, current = null }) {
             ]}
           >
             <SelectAsync
-              entity={'client'}
+              entity={'supplier'}
               displayLabels={['name']}
               searchFields={'name'}
-              redirectLabel={'Add New Client'}
+              redirectLabel={'Add New Supplier'}
               withRedirect
               urlToRedirect={'/customer'}
             />

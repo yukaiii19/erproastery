@@ -17,6 +17,7 @@ const SelectAsync = ({
   placeholder = 'select',
   value,
   onChange,
+  autoSelect = false,
 }) => {
   const translate = useLanguage();
   const [selectOptions, setOptions] = useState([]);
@@ -29,7 +30,16 @@ const SelectAsync = ({
   };
   const { result, isLoading: fetchIsLoading, isSuccess } = useFetch(asyncList);
   useEffect(() => {
-    isSuccess && setOptions(result);
+    if (isSuccess) {
+      setOptions(result);
+      if (autoSelect && result.length > 0 && value === undefined) {
+        const val = result[0][outputValue] ?? result[0];
+        setCurrentValue(val);
+        if (onChange) {
+          onChange(val, result[0]);
+        }
+      }
+    }
   }, [isSuccess]);
 
   const labels = (optionField) => {
@@ -40,7 +50,7 @@ const SelectAsync = ({
       const val = value?.[outputValue] ?? value;
       const optionField = selectOptions.find((x) => x[outputValue] === val);
       setCurrentValue(val);
-      onChange(val, optionField);
+      if (onChange) onChange(val, optionField);
     }
   }, [value, selectOptions]);
 
@@ -51,7 +61,7 @@ const SelectAsync = ({
       const val = newValue?.[outputValue] ?? newValue;
       const optionField = selectOptions.find((x) => x[outputValue] === val);
       setCurrentValue(newValue);
-      onChange(val, optionField);
+      if (onChange) onChange(val, optionField);
     }
   };
 

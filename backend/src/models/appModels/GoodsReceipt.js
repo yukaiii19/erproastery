@@ -67,4 +67,23 @@ const goodsReceiptSchema = new mongoose.Schema({
 });
 
 goodsReceiptSchema.plugin(require('mongoose-autopopulate'));
+
+goodsReceiptSchema.post('save', async function (doc, next) {
+  try {
+    const Product = mongoose.model('Product');
+    for (const item of doc.items) {
+      if (item.product && item.quantityReceived) {
+        const product = await Product.findById(item.product);
+        if (product) {
+          product.stockQuantity = (product.stockQuantity || 0) + item.quantityReceived;
+          await product.save();
+        }
+      }
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = mongoose.model('GoodsReceipt', goodsReceiptSchema);

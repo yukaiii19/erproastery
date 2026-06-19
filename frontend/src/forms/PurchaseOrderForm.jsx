@@ -79,9 +79,13 @@ export default function PurchaseOrderForm({ isUpdateForm = false }) {
                         const items = form.getFieldValue('items') || [];
                         items[name] = {
                           ...items[name],
+                          product: value,
                           itemName: option?.name || '',
+                          price: option?.cost || option?.price || 0,
+                          quantity: items[name]?.quantity || 1,
                         };
                         form.setFieldsValue({ items });
+                        handlePriceQuantityChange(name);
                       }}
                     />
                   </Form.Item>
@@ -126,19 +130,6 @@ export default function PurchaseOrderForm({ isUpdateForm = false }) {
         </Form.List>
       </div>
 
-      <Form.Item
-        label={translate('status') || 'Status'}
-        name="status"
-        initialValue="draft"
-      >
-        <Select>
-          <Select.Option value="draft">Draft</Select.Option>
-          <Select.Option value="pending_approval">Pending Approval</Select.Option>
-          <Select.Option value="approved">Approved</Select.Option>
-          <Select.Option value="rejected">Rejected</Select.Option>
-          <Select.Option value="fulfilled">Fulfilled</Select.Option>
-        </Select>
-      </Form.Item>
     </>
   );
 }
