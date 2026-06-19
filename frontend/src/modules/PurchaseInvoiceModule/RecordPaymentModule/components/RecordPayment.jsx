@@ -37,7 +37,7 @@ export default function RecordPurchasePayment({ config }) {
       form.resetFields();
       dispatch(erp.resetAction({ actionType: 'recordPayment' }));
       dispatch(erp.list({ entity }));
-      navigate(`/${entity}/`);
+      navigate(`/purchase-invoice/`);
     }
   }, [isSuccess]);
 
@@ -54,7 +54,7 @@ export default function RecordPurchasePayment({ config }) {
 
     dispatch(
       erp.recordPayment({
-        entity: 'purchasePayment',
+        entity: 'purchasepayment',
         jsonData: fieldsValue,
       })
     );

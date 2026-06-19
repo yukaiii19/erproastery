@@ -6,7 +6,7 @@ import { selectItemById, selectCurrentItem, selectRecordPaymentItem } from '@/re
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import PurchasePayment from './components/PurchasePayment';
+import PurchasePayment from './components/Payment';
 
 export default function RecordPurchasePaymentModule({ config }) {
   const dispatch = useDispatch();

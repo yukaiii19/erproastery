@@ -3,6 +3,8 @@ import CrudModule from '@/modules/CrudModule/CrudModule';
 import PurchaseOrderForm from '@/forms/PurchaseOrderForm';
 import { fields } from './config';
 import useLanguage from '@/locale/useLanguage';
+import dayjs from 'dayjs';
+import { useMoney, useDate } from '@/settings';
 
 export default function PurchaseOrder() {
   const translate = useLanguage();
@@ -23,11 +25,41 @@ export default function PurchaseOrder() {
     entity,
     ...Labels,
   };
+  const { dateFormat } = useDate();
+  const { moneyFormatter } = useMoney();
+
+  const dataTableColumns = [
+    {
+      title: translate('Number'),
+      dataIndex: 'number',
+    },
+    {
+      title: translate('Supplier'),
+      dataIndex: 'supplier',
+      render: (supplier) => supplier ? supplier.name || JSON.stringify(supplier) : 'Empty',
+    },
+    {
+      title: translate('Date'),
+      dataIndex: 'date',
+      render: (date) => {
+        return dayjs(date).format(dateFormat);
+      },
+    },
+    {
+      title: translate('Total'),
+      dataIndex: 'total',
+      render: (total, record) => {
+        return moneyFormatter({ amount: total || 0, currency_code: record.currency });
+      },
+    },
+  ];
+
   const config = {
     ...configPage,
     fields,
     searchConfig,
     deleteModalLabels,
+    dataTableColumns,
   };
   return (
     <CrudModule

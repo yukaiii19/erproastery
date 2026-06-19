@@ -91,12 +91,22 @@ export default function UpdateItem({ config, UpdateForm }) {
       }
       if (fieldsValue.items) {
         let newList = [];
+        let calculatedSubTotal = 0;
         fieldsValue.items.map((item) => {
           const { quantity, price, itemName, description } = item;
           const total = item.quantity * item.price;
+          calculatedSubTotal = calculate.add(calculatedSubTotal, total);
           newList.push({ total, quantity, price, itemName, description });
         });
         dataToUpdate.items = newList;
+        
+        let taxRate = fieldsValue.taxRate || 0;
+        let taxTotal = calculate.multiply(calculatedSubTotal, taxRate / 100);
+        let total = calculate.add(calculatedSubTotal, taxTotal);
+
+        dataToUpdate.subTotal = calculatedSubTotal;
+        dataToUpdate.taxTotal = taxTotal;
+        dataToUpdate.total = total;
       }
     }
 

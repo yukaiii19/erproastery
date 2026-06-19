@@ -4,7 +4,7 @@ import UpdatePurchasePaymentModule from '@/modules/PurchasePaymentModule/UpdateP
 export default function PurchasePaymentUpdate() {
   const translate = useLanguage();
 
-  const entity = 'purchasePayment';
+  const entity = 'purchasepayment';
 
   const Labels = {
     PANEL_TITLE: translate('purchasePayment'),

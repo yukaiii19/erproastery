@@ -97,10 +97,12 @@ export default function DataTable({ config, extra = [] }) {
   }
 
   let dispatchColumns = [];
-  if (fields) {
+  if (dataTableColumns && dataTableColumns.length > 0) {
+    dispatchColumns = [...dataTableColumns];
+  } else if (fields) {
     dispatchColumns = [...dataForTable({ fields, translate, moneyFormatter, dateFormat })];
   } else {
-    dispatchColumns = [...dataTableColumns];
+    dispatchColumns = [];
   }
 
   dataTableColumns = [

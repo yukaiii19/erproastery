@@ -91,12 +91,22 @@ export default function CreateItem({ config, CreateForm }) {
     if (fieldsValue) {
       if (fieldsValue.items) {
         let newList = [...fieldsValue.items];
+        let calculatedSubTotal = 0;
         newList.map((item) => {
           item.total = calculate.multiply(item.quantity, item.price);
+          calculatedSubTotal = calculate.add(calculatedSubTotal, item.total);
         });
+        
+        let taxRate = fieldsValue.taxRate || 0;
+        let taxTotal = calculate.multiply(calculatedSubTotal, taxRate / 100);
+        let total = calculate.add(calculatedSubTotal, taxTotal);
+
         fieldsValue = {
           ...fieldsValue,
           items: newList,
+          subTotal: calculatedSubTotal,
+          taxTotal: taxTotal,
+          total: total,
         };
       }
     }

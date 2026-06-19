@@ -53,7 +53,7 @@ export default function PurchasePaymentForm({ maxAmount = null, isUpdateForm = f
       </Form.Item>
       <Form.Item
         label={translate('purchasePayment Mode')}
-        name="purchasePaymentMode"
+        name="paymentMode"
         rules={[
           {
             required: true,
@@ -61,10 +61,10 @@ export default function PurchasePaymentForm({ maxAmount = null, isUpdateForm = f
         ]}
       >
         <SelectAsync
-          entity={'purchasePaymentMode'}
+          entity={'paymentMode'}
           displayLabels={['name']}
           withRedirect={true}
-          urlToRedirect="/purchasePayment/mode"
+          urlToRedirect="/payment/mode"
           redirectLabel="Add PurchasePayment Mode"
           autoSelect={true}
         ></SelectAsync>

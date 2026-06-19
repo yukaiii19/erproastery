@@ -35,6 +35,9 @@ const Supplier = lazy(() => import('@/pages/Supplier'));
 const PurchaseOrder = lazy(() => import('@/pages/PurchaseOrder'));
 const GoodsReceipt = lazy(() => import('@/pages/GoodsReceipt'));
 const PurchaseInvoice = lazy(() => import('@/pages/PurchaseInvoice'));
+const PurchaseInvoiceCreate = lazy(() => import('@/pages/PurchaseInvoice/PurchaseInvoiceCreate'));
+const PurchaseInvoiceRead = lazy(() => import('@/pages/PurchaseInvoice/PurchaseInvoiceRead'));
+const PurchaseInvoiceUpdate = lazy(() => import('@/pages/PurchaseInvoice/PurchaseInvoiceUpdate'));
 const PurchaseInvoiceRecordPayment = lazy(() => import('@/pages/PurchaseInvoice/PurchaseInvoiceRecordPayment'));
 
 const SalesOrder = lazy(() => import('@/pages/SalesOrder'));
@@ -155,6 +158,22 @@ let routes = {
     {
       path: '/purchase-invoice',
       element: <PurchaseInvoice />,
+    },
+    {
+      path: '/purchaseinvoice',
+      element: <PurchaseInvoice />,
+    },
+    {
+      path: '/purchaseinvoice/create',
+      element: <PurchaseInvoiceCreate />,
+    },
+    {
+      path: '/purchaseinvoice/read/:id',
+      element: <PurchaseInvoiceRead />,
+    },
+    {
+      path: '/purchaseinvoice/update/:id',
+      element: <PurchaseInvoiceUpdate />,
     },
     {
       path: '/purchaseinvoice/pay/:id',

@@ -58,11 +58,11 @@ export default function PurchasePayment() {
     },
     {
       title: translate('PurchasePayment Mode'),
-      dataIndex: ['purchasePaymentMode', 'name'],
+      dataIndex: ['paymentMode', 'name'],
     },
   ];
 
-  const entity = 'purchasePayment';
+  const entity = 'purchasepayment';
 
   const Labels = {
     PANEL_TITLE: translate('purchasePayment'),

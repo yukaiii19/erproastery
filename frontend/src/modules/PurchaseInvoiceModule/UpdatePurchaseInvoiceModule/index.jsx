@@ -2,7 +2,7 @@ import NotFound from '@/components/NotFound';
 
 import { ErpLayout } from '@/layout';
 import UpdateItem from '@/modules/ErpPanelModule/UpdateItem';
-import PurchaseInvoiceForm from '@/modules/PurchaseInvoiceModule/Forms/PurchaseInvoiceForm';
+import PurchaseInvoiceForm from '@/forms/PurchaseInvoiceForm';
 
 import PageLoader from '@/components/PageLoader';
 

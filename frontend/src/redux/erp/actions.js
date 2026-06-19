@@ -114,7 +114,7 @@ export const erp = {
         });
         dispatch({
           type: actionTypes.CURRENT_ITEM,
-          payload: data.result.invoice,
+          payload: data.result ? (data.result.invoice || data.result.purchaseInvoice) : null,
         });
       } else {
         dispatch({

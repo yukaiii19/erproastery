@@ -1,13 +1,34 @@
-import React from 'react';
-import { Form, Input, InputNumber, Select, Button, Space, DatePicker, Switch } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, InputNumber, Select, Button, Space, DatePicker, Switch, Row, Col, Divider } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import useLanguage from '@/locale/useLanguage';
 import SelectAsync from '@/components/SelectAsync';
 import calculate from '@/utils/calculate';
+import MoneyInputFormItem from '@/components/MoneyInputFormItem';
 
-export default function PurchaseInvoiceForm({ isUpdateForm = false }) {
+export default function PurchaseInvoiceForm({ isUpdateForm = false, subTotal = 0, current = null }) {
   const translate = useLanguage();
   const form = Form.useFormInstance(); // Get the current form instance
+  const [total, setTotal] = useState(0);
+  const [taxRate, setTaxRate] = useState(0);
+  const [taxTotal, setTaxTotal] = useState(0);
+
+  const handelTaxChange = (value) => {
+    setTaxRate(value / 100);
+  };
+
+  useEffect(() => {
+    if (current) {
+      const { taxRate = 0 } = current;
+      setTaxRate(taxRate / 100);
+    }
+  }, [current]);
+
+  useEffect(() => {
+    const currentTotal = calculate.add(calculate.multiply(subTotal, taxRate), subTotal);
+    setTaxTotal(Number.parseFloat(calculate.multiply(subTotal, taxRate)));
+    setTotal(Number.parseFloat(currentTotal));
+  }, [subTotal, taxRate]);
 
   const handlePriceQuantityChange = (name) => {
     // When price or quantity changes, auto-calculate total for this row
@@ -166,6 +187,70 @@ export default function PurchaseInvoiceForm({ isUpdateForm = false }) {
           )}
         </Form.List>
       </div>
+
+      <Divider />
+      <Row gutter={[12, -5]}>
+        <Col className="gutter-row" span={4} offset={15}>
+          <p
+            style={{
+              paddingLeft: '12px',
+              paddingTop: '5px',
+              margin: 0,
+              textAlign: 'right',
+            }}
+          >
+            {translate('Sub Total')} :
+          </p>
+        </Col>
+        <Col className="gutter-row" span={5}>
+          <MoneyInputFormItem readOnly value={subTotal} />
+        </Col>
+      </Row>
+      <Row gutter={[12, -5]}>
+        <Col className="gutter-row" span={4} offset={15}>
+          <Form.Item
+            name="taxRate"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <SelectAsync
+              value={taxRate}
+              onChange={handelTaxChange}
+              entity={'taxes'}
+              outputValue={'taxValue'}
+              displayLabels={['taxName']}
+              withRedirect={true}
+              urlToRedirect="/taxes"
+              redirectLabel={translate('Add New Tax')}
+              placeholder={translate('Select Tax Value')}
+            />
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={5}>
+          <MoneyInputFormItem readOnly value={taxTotal} />
+        </Col>
+      </Row>
+      <Row gutter={[12, -5]}>
+        <Col className="gutter-row" span={4} offset={15}>
+          <p
+            style={{
+              paddingLeft: '12px',
+              paddingTop: '5px',
+              margin: 0,
+              textAlign: 'right',
+            }}
+          >
+            {translate('Total')} :
+          </p>
+        </Col>
+        <Col className="gutter-row" span={5}>
+          <MoneyInputFormItem readOnly value={total} />
+        </Col>
+      </Row>
+      <Divider />
 
       <Form.Item
         label={translate('Payment Status') || 'Payment Status'}

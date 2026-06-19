@@ -4,7 +4,7 @@ import ReadPurchasePaymentModule from '@/modules/PurchasePaymentModule/ReadPurch
 export default function PurchasePaymentRead() {
   const translate = useLanguage();
 
-  const entity = 'purchasePayment';
+  const entity = 'purchasepayment';
 
   const Labels = {
     PANEL_TITLE: translate('purchasePayment'),
