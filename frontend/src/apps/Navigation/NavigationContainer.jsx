@@ -5,8 +5,7 @@ import { Button, Drawer, Layout, Menu } from 'antd';
 import { useAppContext } from '@/context/appContext';
 
 import useLanguage from '@/locale/useLanguage';
-import logoIcon from '@/style/images/logo-icon.svg';
-import logoText from '@/style/images/logo-text.svg';
+import logoIcon from '@/logo-icon.svg';
 
 import useResponsive from '@/hooks/useResponsive';
 
@@ -239,21 +238,13 @@ function Sidebar({ collapsible, isMobile = false }) {
         onClick={() => navigate('/')}
         style={{
           cursor: 'pointer',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '20px 0',
         }}
       >
-        <img src={logoIcon} alt="Logo" style={{ marginLeft: '-5px', height: '40px' }} />
-
-        {!showLogoApp && (
-          <img
-            src={logoText}
-            alt="Logo"
-            style={{
-              marginTop: '3px',
-              marginLeft: '10px',
-              height: '38px',
-            }}
-          />
-        )}
+        <img src={logoIcon} alt="Logo" style={{ height: '100px', maxWidth: '100%', objectFit: 'contain' }} />
       </div>
       <Menu
         items={items}
