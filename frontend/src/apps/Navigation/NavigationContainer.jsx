@@ -159,19 +159,19 @@ function Sidebar({ collapsible, isMobile = false }) {
       label: <Link to={'/stock-adjustment'}>{translate('Stock Adjustment') || 'Stock Adjustment'}</Link>,
       roles: ['inventory_manager'],
     },
-    {
-      key: 'about',
-      label: <Link to={'/about'}>{translate('about')}</Link>,
-      icon: <ReconciliationOutlined />,
-      roles: [], // everyone can see about, or we handle it via filter logic
-    },
+    // {
+    //   key: 'about',
+    //   label: <Link to={'/about'}>{translate('about')}</Link>,
+    //   icon: <ReconciliationOutlined />,
+    //   roles: [], // everyone can see about, or we handle it via filter logic
+    // },
   ];
 
   const items = rawItems
     .filter((item) => {
       // If no roles specified, or if it's the about/dashboard, show it
-      if (item.key === 'dashboard' || item.key === 'about') return true;
-      
+      if (item.key === 'dashboard' /*|| item.key === 'about'*/) return true;
+
       // Default roles for existing items if not explicitly set
       const defaultRoles = {
         customer: ['sales_manager', 'sales_representative', 'ar_analyst'],
@@ -182,7 +182,7 @@ function Sidebar({ collapsible, isMobile = false }) {
         taxes: ['accounting_manager'],
         generalSettings: [], // Only admin/owner
       };
-      
+
       const allowedRoles = item.roles || defaultRoles[item.key] || [];
       return hasAccess(allowedRoles);
     })

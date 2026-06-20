@@ -23,7 +23,7 @@ const Settings = lazy(() => import('@/pages/Settings/Settings'));
 
 const Profile = lazy(() => import('@/pages/Profile'));
 
-const About = lazy(() => import('@/pages/About'));
+// const About = lazy(() => import('@/pages/About'));
 
 const PaymentMode = lazy(() => import('@/pages/PaymentMode'));
 const Taxes = lazy(() => import('@/pages/Taxes'));
@@ -57,10 +57,10 @@ let routes = {
       path: '/logout',
       element: <Logout />,
     },
-    {
-      path: '/about',
-      element: <About />,
-    },
+    // {
+    //   path: '/about',
+    //   element: <About />,
+    // },
     {
       path: '/',
       element: <Invoice />,
